@@ -1,8 +1,12 @@
 # Tutorial Two
 
+Start using github - more command line practice and networking.
+
+Get directly into basic programming with javascript.
+
 ## Git
 
-Set up github account a create first project.
+Set up github account and create first project.
 
 Create ssh key
 
@@ -25,9 +29,7 @@ $ cat .ssh/id_file.pub
 
 Go to github settings -> ssh keys and add key.
 
-Now create a `todo` project and clone the repository using ssh.
-
-Give run down of basic git commands: status, add, push, etc.
+Now create a `todo` project using website and clone the repository using ssh.
 
 ## NodeJS
 
@@ -64,7 +66,8 @@ Create `index.js` and introduce programming.
   $ node index.js
 ```
 
-Push to repository
+Give run down of basic git commands: status, add, push, etc.
+
 
 ```bash
 $ git status

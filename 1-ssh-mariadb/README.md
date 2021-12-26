@@ -1,5 +1,14 @@
 # Tutorial One
 
+Get ssh up and running in preparation for transfering files between me and
+student. Specifically also important for github account in tutorial two.
+
+This forms an introduction to working in the shell, using tmux, vim, and the
+command line.
+
+The database may be getting ahead of ourselves but it helps with understanding
+command line usage.
+
 ## SSH
 
 Sort out ssh network connection between the two laptops.
