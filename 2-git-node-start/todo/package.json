@@ -1,0 +1,20 @@
+{
+  "name": "todo-tutorial",
+  "version": "1.0.0",
+  "description": "Basic tutorial to help Adam get started",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/darrylcousins/todo-tutorial.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/darrylcousins/todo-tutorial/issues"
+  },
+  "homepage": "https://github.com/darrylcousins/todo-tutorial#readme"
+}
