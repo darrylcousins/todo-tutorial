@@ -4,8 +4,7 @@ const mariadb = require('mariadb');
 
 require('dotenv').config();
 
-const pool = 
-  mariadb.createPool({
+const pool =  mariadb.createPool({
     host: process.env.DB_HOST, 
     user: process.env.DB_USER, 
     password: process.env.DB_PASS,
@@ -13,7 +12,10 @@ const pool =
     database: process.env.DB_NAME
   });
 
-const main = async () => {
+/*
+ * With async/await
+ */
+const trial = async () => {
   let conn;
   try {
     conn = await pool.getConnection();
@@ -22,9 +24,30 @@ const main = async () => {
   } catch (err) {
     throw err;
   } finally {
-    if (conn) conn.end();
+    if (conn) conn.release();
+    process.exit();
   };
 };
 
-main().catch(console.error);
+/*
+ * With promise chaining
+ */
+const run = () => {
+  pool.getConnection()
+    .then(conn => {
+      conn.query("select * from tasks")
+        .then(result => {
+          console.log(result);
+          conn.release();
+          process.exit(0);
+        })
+        .catch(err => {
+          throw err;
+        });
+    })
+    .catch(err => {
+      throw err;
+    });
+};
 
+run();
