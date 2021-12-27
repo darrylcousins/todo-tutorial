@@ -9,8 +9,6 @@ exports.files = {
   stylesheets: {joinTo: 'app.css'}
 };
 
-// strangely in my brunch-with-express package I did not need to add preset-env
-// but here esmodules were not transpiled
 exports.plugins = {
   babel: {
     presets: [

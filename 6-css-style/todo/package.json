@@ -11,7 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@bikeshaving/crank": "^0.3.11"
+    "@bikeshaving/crank": "^0.3.11",
+    "tachyons": "^4.12.0"
   },
   "devDependencies": {
     "@babel/core": "^7.16.5",

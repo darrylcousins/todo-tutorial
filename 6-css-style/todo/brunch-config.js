@@ -6,11 +6,20 @@ exports.files = {
       'app.js': /^app/
     }
   },
-  stylesheets: {joinTo: 'app.css'}
+  stylesheets: {
+    joinTo: {
+      'app.css': /^app/,
+      'vendor.css': /^node_modules/
+    }
+  },
 };
 
-// strangely in my brunch-with-express package I did not need to add preset-env
-// but here esmodules were not transpiled
+exports.npm = {
+  styles: {
+    tachyons: ['css/tachyons.css']
+  }
+};
+
 exports.plugins = {
   babel: {
     presets: [

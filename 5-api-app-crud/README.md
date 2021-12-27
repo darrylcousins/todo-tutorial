@@ -1,6 +1,7 @@
-# API
+# API, App, and CRUD
 
-Connect to mariadb and build api to query database.
+Connect to mariadb and build api to query database. Follow on with building
+client app and rounding out CRUD operations through the browser.
 
 Ensure that database connector and dotenv are installed.
 
