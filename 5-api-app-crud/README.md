@@ -33,4 +33,4 @@ $ curl -X PUT  -d '{"id":1, "description": "test2", "completed": 1}' -H "Content
 
 ## Access api from client app
 
-At first write a task listing into initialize.js - later will split out into components.
+Start with basic task listing then develop all CRUD operations.
