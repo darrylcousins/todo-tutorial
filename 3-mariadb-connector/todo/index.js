@@ -13,26 +13,9 @@ const pool =  mariadb.createPool({
   });
 
 /*
- * With async/await
- */
-const trial = async () => {
-  let conn;
-  try {
-    conn = await pool.getConnection();
-    const result = await conn.query("select * from tasks");
-    console.log(result);
-  } catch (err) {
-    throw err;
-  } finally {
-    if (conn) conn.release();
-    process.exit();
-  };
-};
-
-/*
  * With promise chaining
  */
-const run = () => {
+const main = () => {
   pool.getConnection()
     .then(conn => {
       conn.query("select * from tasks")
@@ -50,4 +33,4 @@ const run = () => {
     });
 };
 
-run();
+main();

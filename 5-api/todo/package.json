@@ -10,13 +10,15 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "@bikeshaving/crank": "^0.3.11"
+  },
   "devDependencies": {
     "@babel/core": "^7.16.5",
     "@babel/preset-react": "^7.16.5",
     "babel-brunch": "^7.0.1",
-    "express": "^4.17.2"
-  },
-  "dependencies": {
-    "@bikeshaving/crank": "^0.3.11"
+    "dotenv": "^10.0.0",
+    "express": "^4.17.2",
+    "mariadb": "^2.5.5"
   }
 }
