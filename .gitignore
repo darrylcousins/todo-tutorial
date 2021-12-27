@@ -2,6 +2,9 @@
 *.swp
 *.swo
 
+# brunch
+public
+
 # Logs
 logs
 *.log

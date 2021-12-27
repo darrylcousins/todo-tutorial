@@ -12,7 +12,7 @@ module.exports = function startServer(PORT, PATH, callback) {
   // brunch compiled static files
   app.use(express.static(path.join(__dirname, PATH)));
 
-  app.get('/', (req, res) => {
+  app.get('/hello', (req, res) => {
     res.send('Hello World!')
   });
 

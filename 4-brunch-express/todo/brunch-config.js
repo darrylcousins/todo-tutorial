@@ -14,12 +14,6 @@ exports.files = {
 exports.plugins = {
   babel: {
     presets: [
-      ['@babel/preset-env',
-        {
-          "targets": "defaults",
-          "modules": "auto",
-        }
-      ],
       '@babel/preset-react'
     ]
   },
