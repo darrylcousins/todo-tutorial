@@ -63,7 +63,7 @@ function* Tasks() {
   };
 
   const removeTask = async (ev) => {
-    const {name} = ev.target;
+    const name = ev.target.getAttribute("name");
     const task = tasks.find(el => el.id === parseInt(name));
     if (confirm(`Delete ${task.description}?`)) {
       deleteTask(task.id);
@@ -152,56 +152,82 @@ function* Tasks() {
       });
   };
 
+  /**
+   * Hide the add form on escape key
+   *
+   * @function hideForm
+   * @param {object} ev Event emitted
+   * @listens window.keyup
+   */
+  const hideAddForm = async (ev) => {
+    if (ev.key && ev.key === "Escape") {
+      const input = document.getElementById("description");
+      if (input) {
+        adding = false;
+        this.refresh();
+      };
+    }
+  };
+
+  window.document.addEventListener("keyup", hideAddForm);
+
   for (const _ of this) { // eslint-disable-line no-unused-vars
     yield (
-      <div>
-        <h2>
-          Tasks
-        </h2>
-        <div>
-          { loading && <span>Loading</span> }
-          { error && <span>{ error }</span> }
-          { tasks.length > 0 && (
-            <table>
-              <thead>
-                <th>Description</th>
-                <th align="right">Completed</th>
-                <th>&nbsp;</th>
-              </thead>
-              <tbody>
-                {tasks.map(task => (
-                  <tr>
-                    <td>{ task.description }</td>
-                    <td align="right">
-                      <input 
-                        name={task.id}
-                        type="checkbox" 
-                        checked={Boolean(task.completed)} 
-                        onchange={markCompletion} />
-                    </td>
-                    <td align="right">
-                      <button
-                        name={task.id}
-                        onclick={removeTask}>
-                        &#x2717;
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
-        <div>
-          {adding ? (
-            <Fragment>
-              <input id="description" type="text" placeholder="Description" onchange={getDescription} />
-              <button onclick={getDescription}>Submit</button>
-            </Fragment>
-          ) : (
-            <button onclick={addTask}>Add Task</button>
-          )}
-        </div>
+      <div class="pa4 mw6 center">
+        { loading && <span>Loading</span> }
+        { error && <span>{ error }</span> }
+        { tasks.length > 0 && (
+          <table  class="f6 w-100">
+            <thead>
+              <th class="fw6 bb b--black-20 tl pb2 pr3 bg-white">Description</th>
+              <th class="fw6 bb b--black-20 tr pb2 pr3 bg-white">Completed</th>
+              <th class="fw6 bb b--black-20 tl pb2 pr3 bg-white">&nbsp;</th>
+            </thead>
+            <tbody class="lh-copy">
+              {tasks.map(task => (
+                <tr>
+                  <td class="pv3 pr3 bb b--black-20">{ task.description }</td>
+                  <td class="pv3 pr3 tr bb b--black-20">
+                    <input 
+                      name={task.id}
+                      type="checkbox" 
+                      checked={Boolean(task.completed)} 
+                      onchange={markCompletion} />
+                  </td>
+                  <td class="pv3 pr3 tr bb b--black-20">
+                    <div 
+                      name={task.id}
+                      onclick={removeTask}
+                      class="pointer dark-red material-icons">
+                      delete
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+        {adding ? (
+          <div class="mt2">
+            <input
+              id="description"
+              class="pa2 input-reset ba bg-transparent w-100 measure"
+              type="text"
+              placeholder="Description"
+              onchange={getDescription} />
+            <button
+              class="w-100 mt2 pa2"
+              onclick={getDescription}>Submit</button>
+          </div>
+        ) : (
+          <div class="mt2">
+            <button
+              class="w-100 pa2"
+              onclick={addTask}>
+              <span class="mr2 material-icons">add_task</span>Add Task
+            </button>
+          </div>
+        )}
       </div>
     )
   };

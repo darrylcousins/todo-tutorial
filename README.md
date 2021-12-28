@@ -19,6 +19,8 @@ Basic tutorial to help Adam get started
 * tachyons
 * icons?
 
+## EJS Templating
+
 ## Database extensions?
 
 * users

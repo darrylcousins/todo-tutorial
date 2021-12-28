@@ -16,7 +16,7 @@ exports.files = {
 
 exports.npm = {
   styles: {
-    tachyons: ['css/tachyons.css']
+    tachyons: ['css/tachyons.css'],
   }
 };
 
@@ -29,7 +29,7 @@ exports.plugins = {
   sass: {
     options: {
       includePaths: [
-        'app/styles', 'node_modules/'
+        'app/styles', 'node_modules'
       ]
     }
   }

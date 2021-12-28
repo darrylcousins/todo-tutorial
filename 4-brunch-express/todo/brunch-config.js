@@ -16,12 +16,5 @@ exports.plugins = {
     presets: [
       '@babel/preset-react'
     ]
-  },
-  sass: {
-    options: {
-      includePaths: [
-        'app/styles', 'node_modules/'
-      ]
-    }
   }
 };

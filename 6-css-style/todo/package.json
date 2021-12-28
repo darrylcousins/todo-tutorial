@@ -5,7 +5,8 @@
   "main": "brunch-config.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "brunch watch --server"
+    "start": "brunch watch --server",
+    "postinstall": "cp -R node_modules/@fortawesome/fontawesome-free/webfonts app/assets/webfonts"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +21,7 @@
     "babel-brunch": "^7.0.1",
     "dotenv": "^10.0.0",
     "express": "^4.17.2",
-    "mariadb": "^2.5.5"
+    "mariadb": "^2.5.5",
+    "sass-brunch": "^3.0.1"
   }
 }
