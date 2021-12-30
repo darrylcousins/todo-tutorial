@@ -6,16 +6,35 @@
     <title>Tasks</title>
     <link rel="stylesheet" href="/vendor.css">
     <link rel="stylesheet" href="/app.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined"
           rel="stylesheet">
     <script src="/vendor.js"></script>
     <script src="/app.js"></script>
     <script>require('initialize');</script>
   </head>
-  <body class="sans-serif w-100">
-    <header class="white bg-dark-blue bb b--black">
-      <h1 class="ma0 pa2 tc"><span class="material-icons mr2">task_alt</span>Tasks</h1>
+  <body class="w-100">
+    <header class="white bg-dark-blue bb b--navy">
+      <h1 class="ma0 pa3 tc"><span class="material-icons mr2">task_alt</span>Tasks</h1>
     </header>
-    <div id="app" />
+    <div id="app"></div>
+    <footer class="pv4 ph3 ph5-m ph6-l mid-gray">
+      <small class="f6 db tr">© 2016 <b>Crazyman Productions</b></small>
+    </footer>
+    <div id="toast"></div>
+    <div id="modal" class="modal"></div>
+    <script>
+      // Get the modal, close on click and escape key
+      const modal = document.getElementById('modal');
+      window.addEventListener("click", (ev) => {
+        if (ev.target == modal) {
+          modal.style.display = "none";
+        };
+      });
+      window.addEventListener("keyup", (ev) => {
+        if (ev.key && ev.key === "Escape") {
+          modal.style.display = "none";
+        };
+      });
+    </script>
   </body>
 </html>

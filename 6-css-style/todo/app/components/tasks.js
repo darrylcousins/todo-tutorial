@@ -3,6 +3,76 @@
 /** @jsx createElement */
 
 const { createElement, Fragment } = require("@bikeshaving/crank/cjs");
+const { renderer } = require("@bikeshaving/crank/cjs/dom");
+
+/**
+ * Show toast and set text
+ */
+const showToast = (text) => {
+  const toast = document.getElementById("toast");
+
+  toast.innerHTML = text;
+  toast.className = "show";
+
+  setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+};
+
+/**
+ * Create an editable field for editing task description
+ */
+function* DescriptionField({id, description, callback}) {
+
+  const valid = true;
+
+  for ({ id, description, callback } of this) {
+    yield (
+      <input
+        class={`mr1 pa2 ba bg-transparent hover-bg-near-white w-100 input-reset br2 ${
+          !valid ? "invalid" : ""
+        }`}
+        value={description}
+        id={`input-${id}`}
+        onchange={callback}
+      />
+    );
+  };
+};
+
+/**
+ * Create a DOM representation of tasks fetched from api
+ *
+ * @generator
+ * @yields {Element} DOM element displaying tasks
+ */
+const ConfirmModal = ({task, callback}) => {
+  const callAction = (result) => {
+    const modal = document.getElementById('modal');
+    modal.style.display = "none";
+    callback(result);
+  };
+  return (
+    <div class="modal-content bg-near-white pa3 mw6 br2">
+      <div class="container tc">
+        <h2>Delete Task</h2>
+          <p>Are you sure you want to delete <b>{task.description}</b>?</p>
+            <button
+              type="button"
+              class="pointer br2 bn pv2 ph3 br--left bg-animate bg-dark-blue white hover-bg-navy relative"
+              onclick={() => callAction(false)}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="pointer br2 bn pv2 ph3 br--right bg-animate border-box bg-red white hover-bg-dark-red relative"
+              onclick={() => callAction(true)}
+            >
+              Delete
+            </button>
+      </div>
+    </div>
+  );
+};
 
 /**
  * Create a DOM representation of tasks fetched from api
@@ -30,6 +100,12 @@ function* Tasks() {
    */
   let adding = false;
   /**
+   * Track which description field is being edited
+   *
+   * @member {integer} editing
+   */
+  let editing = null;
+  /**
    * The fetched list of tasks
    *
    * @member {array} tasks
@@ -47,6 +123,7 @@ function* Tasks() {
       .then((json) => {
         tasks = json;
         loading = false;
+        console.log(json);
         this.refresh();
       })
       .catch((err) => {
@@ -65,9 +142,13 @@ function* Tasks() {
   const removeTask = async (ev) => {
     const name = ev.target.getAttribute("name");
     const task = tasks.find(el => el.id === parseInt(name));
-    if (confirm(`Delete ${task.description}?`)) {
-      deleteTask(task.id);
-    }
+    const callback = (res) => {
+      console.log(res);
+      if (res) deleteTask(task.id);
+    };
+    const props = {task, callback};
+    renderer.render(<ConfirmModal {...props} />, document.querySelector("#modal"))
+    document.getElementById('modal').style.display="block";
   };
 
   const deleteTask = async (id) => {
@@ -83,6 +164,7 @@ function* Tasks() {
         if (json.affectedRows === 1) {
           getTasks();
         };
+        showToast("Task deleted");
       })
       .catch((err) => {
         error = err.message;
@@ -112,6 +194,7 @@ function* Tasks() {
       .then((json) => {
         if (json.affectedRows === 1) {
           getTasks();
+          showToast("Task updated");
         };
       })
       .catch((err) => {
@@ -144,6 +227,7 @@ function* Tasks() {
           adding = false;
           loading = false;
           getTasks();
+          showToast("Task created");
         };
       })
       .catch((err) => {
@@ -171,6 +255,46 @@ function* Tasks() {
 
   window.document.addEventListener("keyup", hideAddForm);
 
+  /**
+   * Restore description after changes or escape key cancellation
+   */
+  const restoreDescription = async (id) => {
+    const task = tasks.find(el => el.id === id);
+    const field = document.getElementById(`description-${task.id}`);
+    field.innerHTML = task.description;
+  };
+  /**
+   * Editing description
+   */
+  const editDescription = async (ev) => {
+    const id = parseInt(ev.target.id.slice(12));
+    if (ev.target.tagName === "INPUT") {
+      return false;
+    };
+    if (editing !== null) {
+      restoreDescription(editing);
+    };
+    editing = id;
+    const task = tasks.find(el => el.id === id);
+    const {description} = task;
+    const callback = (ev) => {
+      task.description = ev.target.value;
+      editing = null; // no longer editing
+      updateTask(task);
+    };
+    const props = {id, description, callback};
+    renderer.render(<DescriptionField { ...props} />, ev.target); 
+  };
+
+  /**
+   * Restore input fields on escape
+   */
+  window.addEventListener("keyup", (ev) => {
+    if (ev.key && ev.key === "Escape" && editing) {
+      restoreDescription(editing);
+    };
+  });
+
   for (const _ of this) { // eslint-disable-line no-unused-vars
     yield (
       <div class="pa4 mw6 center">
@@ -186,7 +310,14 @@ function* Tasks() {
             <tbody class="lh-copy">
               {tasks.map(task => (
                 <tr>
-                  <td class="pv3 pr3 bb b--black-20">{ task.description }</td>
+                  <td class="pv3 pr3 bb b--black-20">
+                    <div
+                      class="pointer"
+                      onclick={editDescription}
+                      id={`description-${task.id}`}>
+                      { task.description }
+                    </div>
+                    </td>
                   <td class="pv3 pr3 tr bb b--black-20">
                     <input 
                       name={task.id}
@@ -198,7 +329,7 @@ function* Tasks() {
                     <div 
                       name={task.id}
                       onclick={removeTask}
-                      class="pointer dark-red material-icons">
+                      class="pointer dark-red material-icons-outlined">
                       delete
                     </div>
                   </td>
@@ -211,18 +342,15 @@ function* Tasks() {
           <div class="mt2">
             <input
               id="description"
-              class="pa2 input-reset ba bg-transparent w-100 measure"
+              class="pa2 ba bg-transparent hover-bg-near-white w-100 input-reset br2"
               type="text"
-              placeholder="Description"
+              placeholder="Task description"
               onchange={getDescription} />
-            <button
-              class="w-100 mt2 pa2"
-              onclick={getDescription}>Submit</button>
           </div>
         ) : (
           <div class="mt2">
             <button
-              class="w-100 pa2"
+              class="w-100 pa2 pointer"
               onclick={addTask}>
               <span class="mr2 material-icons">add_task</span>Add Task
             </button>
